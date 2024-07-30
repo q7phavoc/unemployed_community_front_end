@@ -1,3 +1,5 @@
+미취업 구직자들이 사용할 수 있는 커뮤니티
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
