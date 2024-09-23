@@ -8,9 +8,11 @@ import Login from './Auth/Login'
 import Logout from './Auth/Logout'
 import NoMatch from './NoMatch'
 import Main from '../pages/Main'
-import FreeBoard from '../pages/FreeBoard'
-import FunBoard from '../pages/FunBoard'
-import JobBoard from '../pages/JobBoard'
+import Community from '../pages/Community'
+import Course from '../pages/Course'
+import Event from '../pages/Event'
+import Profile from '../pages/Profile'
+import Resume from '../pages/Resume'
 
 export default function RoutesSetup() {
   // prettier-ignore
@@ -18,24 +20,45 @@ export default function RoutesSetup() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Main />} />
-        <Route path="/freeBoard" 
+        <Route path="/board" 
           element={
             <RequireAuth>
-              <FreeBoard />
+              <Board />
             </RequireAuth>
           }
         />
-        <Route path="/funBoard" 
+        <Route path="/community" 
           element={
             <RequireAuth>
-              <FunBoard />
+              <Community />
             </RequireAuth>
           }
         />
-        <Route path="/jobBoard" 
+        <Route path="/course" 
           element={
             <RequireAuth>
-              <JobBoard />
+              <Course />
+            </RequireAuth>
+          }
+        />
+        <Route path="/event" 
+          element={
+            <RequireAuth>
+              <Event />
+            </RequireAuth>
+          }
+        />
+        <Route path="/profile" 
+          element={
+            <RequireAuth>
+              <Profile />
+            </RequireAuth>
+          }
+        />
+        <Route path="/resume" 
+          element={
+            <RequireAuth>
+              <Resume />
             </RequireAuth>
           }
         />
