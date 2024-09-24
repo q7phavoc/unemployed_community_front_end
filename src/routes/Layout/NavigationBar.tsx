@@ -1,29 +1,43 @@
-//import {Link} from 'react-router-dom'
-import {Link as RRLink} from 'react-router-dom'
-import {Link} from '../../components'
-import {useAuth} from '../../contexts'
+import { Link as RRLink } from 'react-router-dom';
+import { Link } from '../../components';
+import { useAuth } from '../../contexts';
 
 export default function NavigationBar() {
-  const {loggedUser} = useAuth()
-  // prettier-ignore
+  const { loggedUser } = useAuth();
+
   return (
-    <div className="flex justify-between overflow bg-base-100 h-24">
-      <div className="flex p-2">
-        <Link to="/" className="btn btn-link"><img className='object-scale-down w-24 rounded-full transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0' src={require('../../assets/logo.png')} alt="Link to Home" /></Link>
+    <div className="flex justify-between items-center bg-gradient-to-r from-purple-500 to-blue-500 h-16 p-4 shadow-lg">
+      <div className="flex items-center">
+        <Link to="/" className='bg-transparent'>
+          <img
+            className="bg-transparent object-cover w-20 rounded-full transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0"
+            src={require('../../assets/logo.png')}
+            alt="Link to Home"
+          />
+        </Link>
       </div>
-      <div className="flex p-2 navBar items-center">
-        <Link to="/" className="btn btn-link">홈</Link>
-        {loggedUser && (<Link to="/board" className="ml-4 btn btn-link">게시판</Link>)}
-        {loggedUser && (<Link to="/community" className="ml-4 btn btn-link">커뮤니티</Link>)}
-        {loggedUser && (<Link to="/course" className="ml-4 btn btn-link">교육 자료</Link>)}
-        {loggedUser && (<Link to="/event" className="ml-4 btn btn-link">이벤트</Link>)}
-        {loggedUser && (<Link to="/profile" className="ml-4 btn btn-link">프로필</Link>)}
+      <div className="flex space-x-8">
+        <Link to="/" className="bg-transparent text-lg font-bold text-white transition hover:text-yellow-300 focus:text-yellow-300">홈</Link>
+        {loggedUser && (
+          <>
+            <Link to="/board" className="bg-transparent text-lg font-bold text-white transition hover:text-yellow-300 focus:text-yellow-300">게시판</Link>
+            <Link to="/community" className="bg-transparent text-lg font-bold text-white transition hover:text-yellow-300 focus:text-yellow-300">커뮤니티</Link>
+            <Link to="/course" className="bg-transparent text-lg font-bold text-white transition hover:text-yellow-300 focus:text-yellow-300">교육 자료</Link>
+            <Link to="/event" className="bg-transparent text-lg font-bold text-white transition hover:text-yellow-300 focus:text-yellow-300">이벤트</Link>
+            <Link to="/profile" className="bg-transparent text-lg font-bold text-white transition hover:text-yellow-300 focus:text-yellow-300">프로필</Link>
+          </>
+        )}
       </div>
-      <div className="flex items-center p-2">
-        {!loggedUser && (<RRLink to="/login" className="btn btn-sm btn-primary">로그인</RRLink>)}
-        {!loggedUser && (<RRLink to="/signup" className="ml-4 btn btn-sm btn-outline btn-primary">회원가입</RRLink>)}
-        {loggedUser && (<RRLink to="/logout" className="btn btn-sm btn-outline btn-primary">로그아웃</RRLink>)}
+      <div className="flex items-center space-x-4">
+        {!loggedUser ? (
+          <>
+            <RRLink to="/login" className="btn btn-sm bg-transparent border-2 border-yellow-500 text-yellow-500 hover:bg-transparent hover:text-white rounded-md px-4 py-2 transition">로그인</RRLink>
+            <RRLink to="/signup" className="btn btn-sm bg-transparent border-2 border-green-500 text-green-500 hover:bg-transparent hover:text-white rounded-md px-4 py-2 transition">회원가입</RRLink>
+          </>
+        ) : (
+          <RRLink to="/logout" className="btn btn-sm bg-transparent border-2 border-red-500 text-red-500 hover:bg-transparent hover:text-white rounded-md px-4 py-2 transition">로그아웃</RRLink>
+        )}
       </div>
     </div>
-  )
+  );
 }

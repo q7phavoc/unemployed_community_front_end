@@ -1,74 +1,72 @@
-import React, {useState} from 'react'
-
-interface Post {
-  category: string
-  id: number
-  title: string
-  author: string
-  date: string
-  comments: number
-  views: number
-}
-
-const allPosts: Post[] = [
-  {
-    id: 1,
-    title: 'React를 활용한 취업 정보',
-    author: '홍길동',
-    date: '2023-09-21',
-    comments: 5,
-    views: 120,
-    category: '취업 정보'
-  },
-  {
-    id: 2,
-    title: '취업 후기: ABC 주식회사',
-    author: '김철수',
-    date: '2023-09-20',
-    comments: 2,
-    views: 95,
-    category: '취업 후기'
-  },
-  {
-    id: 3,
-    title: '자기계발을 위한 필독서',
-    author: '이영희',
-    date: '2023-09-19',
-    comments: 3,
-    views: 150,
-    category: '자기계발'
-  },
-  {
-    id: 4,
-    title: 'Q&A: 면접 준비 질문',
-    author: '박민수',
-    date: '2023-09-18',
-    comments: 8,
-    views: 200,
-    category: 'Q&A'
-  }
-]
+import React, { useEffect, useState } from 'react'
+import { BACKEND_URL, BOARD_CATEGORY } from '../../data'
+import { convertISODateToYYYYMMDD } from '../../utils/date'
+import { IBoard } from '../../store/commonTypes'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Board: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('취업 정보')
+  const [selectedCategory, setSelectedCategory] = useState<string>('가입인사')
+  const [posts, setPosts] = useState<IBoard[]>([])
+  const [total, setTotal] = useState<number>(1) // Current page
+  const [currentPage, setCurrentPage] = useState<number>(1) // Current page
+  const [postsPerPage] = useState<number>(10) // Number of posts per page
+  const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수 얻기
 
-  // 선택된 카테고리에 따라 게시글 필터링
-  const filteredPosts = allPosts.filter(post => post.category === selectedCategory)
+  useEffect(() => {
+    const fetchData = async () => {
+      const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+
+      const res = await fetch(BACKEND_URL + '/board/list', requestOptions);
+      const result = await res.json();
+      setTotal(result.total);
+      return result.boards;
+    }
+
+    fetchData().then(res => setPosts(res));
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+
+      // const params = {
+      //   category: selectedCategory
+      // };
+
+      const params = `category=${selectedCategory}&limit=${postsPerPage}&offset=${(currentPage - 1) * postsPerPage}`;
+      const queryString = new URLSearchParams(params).toString();
+
+      const res = await fetch(BACKEND_URL + `/board/list?${queryString}`, requestOptions);
+      const result = await res.json();
+      setTotal(result.total);
+      return result.boards;
+    }
+
+    fetchData().then(res => setPosts(res));
+  }, [selectedCategory, currentPage, postsPerPage]);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const totalPages = Math.ceil(total / postsPerPage); // Calculate total pages
 
   return (
     <div className="p-5 bg-gray-50 rounded-lg shadow-md">
       <h2 className="text-xl font-bold mb-4 text-center">게시판</h2>
       <div className="flex justify-between mb-4">
         <div className="flex space-x-4">
-          {[
-            '가입인사',
-            '취업 정보',
-            '취업 후기',
-            'Q&A',
-            '자기계발',
-            '스터디 모집',
-            '컨퍼런스 동행'
-          ].map(category => (
+          {BOARD_CATEGORY.map(category => (
             <button
               key={category}
               className={`px-4 py-2 rounded ${
@@ -79,9 +77,11 @@ const Board: React.FC = () => {
             </button>
           ))}
         </div>
-        <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-          글쓰기
-        </button>
+        <Link to={'/board/detail'}>
+          <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            글쓰기
+          </button>
+        </Link>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full border-collapse">
@@ -95,17 +95,18 @@ const Board: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map(post => (
+            {posts.length > 0 ? (
+              posts.map(post => (
                 <tr
                   key={post.id}
                   className="hover:bg-gray-100 cursor-pointer"
-                  onClick={() => alert(`게시글 ${post.id} 상세 페이지로 이동`)}>
+                  onClick={() => navigate(`/board/detail/${post.id}`)} // 클릭 시 게시글 ID로 상세 페이지로 이동
+                >
                   <td className="border px-4 py-2">{post.title}</td>
-                  <td className="border px-4 py-2">{post.author}</td>
-                  <td className="border px-4 py-2">{post.date}</td>
-                  <td className="border px-4 py-2">{post.comments}</td>
-                  <td className="border px-4 py-2">{post.views}</td>
+                  <td className="border px-4 py-2">{post.writer_id}</td>
+                  <td className="border px-4 py-2">{convertISODateToYYYYMMDD(post.created_at)}</td>
+                  <td className="border px-4 py-2">{post.comment_count}</td>
+                  <td className="border px-4 py-2">{post.view_count}</td>
                 </tr>
               ))
             ) : (
@@ -117,6 +118,31 @@ const Board: React.FC = () => {
             )}
           </tbody>
         </table>
+      </div>
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-4">
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded-l hover:bg-blue-700"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          이전
+        </button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => handlePageClick(index + 1)}
+            className={`mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+            {index + 1}
+          </button>
+        ))}
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded-r hover:bg-blue-700"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          다음
+        </button>
       </div>
     </div>
   )

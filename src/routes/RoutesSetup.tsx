@@ -1,4 +1,4 @@
-import {Routes, Route} from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Layout from './Layout'
 import RequireAuth from './Auth/RequireAuth'
 import LandingPage from './LandingPage'
@@ -13,6 +13,7 @@ import Course from '../pages/Course'
 import Event from '../pages/Event'
 import Profile from '../pages/Profile'
 import Resume from '../pages/Resume'
+import BoardDetail from '../pages/Board/detail'
 
 export default function RoutesSetup() {
   // prettier-ignore
@@ -20,42 +21,56 @@ export default function RoutesSetup() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Main />} />
-        <Route path="/board" 
+        <Route path="/board"
           element={
             <RequireAuth>
               <Board />
             </RequireAuth>
           }
         />
-        <Route path="/community" 
+        <Route path="/board/detail"
+          element={
+            <RequireAuth>
+              <BoardDetail />
+            </RequireAuth>
+          }
+        />
+        <Route path="/board/detail/:id"
+          element={
+            <RequireAuth>
+              <BoardDetail />
+            </RequireAuth>
+          }
+        />
+        <Route path="/community"
           element={
             <RequireAuth>
               <Community />
             </RequireAuth>
           }
         />
-        <Route path="/course" 
+        <Route path="/course"
           element={
             <RequireAuth>
               <Course />
             </RequireAuth>
           }
         />
-        <Route path="/event" 
+        <Route path="/event"
           element={
             <RequireAuth>
               <Event />
             </RequireAuth>
           }
         />
-        <Route path="/profile" 
+        <Route path="/profile"
           element={
             <RequireAuth>
               <Profile />
             </RequireAuth>
           }
         />
-        <Route path="/resume" 
+        <Route path="/resume"
           element={
             <RequireAuth>
               <Resume />

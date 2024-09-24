@@ -16,3 +16,15 @@ export type ListidCardidS = {listid: UUID; cardids: UUID[]}
 export type CardidListidIndex = CardidListid & {
   index: number
 }
+
+
+export type IBoard = {
+  id: number
+  title: string
+  contents: string
+  board_category: string
+  writer_id: number
+  created_at: string
+  comment_count: number
+  view_count: number
+}

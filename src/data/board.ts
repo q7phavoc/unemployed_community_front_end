@@ -1,4 +1,4 @@
-import {BACKEND_URL} from './constants'
+import { BACKEND_URL } from './constants'
 
 export type IBoard = {
   id: number
@@ -11,7 +11,7 @@ export type IBoard = {
   view_count: number
 }
 
-const convertRandomUser = (result: unknown) => {
+const convertBoard = (result: unknown) => {
   const {
     id,
     title,
@@ -34,21 +34,12 @@ const convertRandomUser = (result: unknown) => {
   }
 }
 
-export const fetchBoardList = (): Promise<IBoard> =>
-  new Promise(async (resolve, reject) => {
-    const requestOptions = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({title: 'React POST Request Example'})
-    }
+export const fetchBoardList = async (): Promise<IBoard[]> => {
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: 'React POST Request Example' })
+  }
 
-    const response = await fetch(BACKEND_URL + '/board/list', requestOptions)
-      // .then(res => res.json())
-      // .then((data: unknown) => {
-      //   console.log(data)
-      //   const {results} = data as {results: IBoard[]}
-      //   resolve(convertRandomUser(results[0]))
-      // })
-      const data = await response.json();
-      return data;
-  })
+  return (await fetch(BACKEND_URL + '/board/list', requestOptions)).json();
+}
