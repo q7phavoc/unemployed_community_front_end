@@ -1,5 +1,5 @@
-import type {IUser} from './User'
-import {makeRandomUser} from './User'
+import type {IUser} from './user'
+import {makeRandomUser} from './user'
 import * as C from './chance'
 import * as I from './image'
 import * as D from './date'

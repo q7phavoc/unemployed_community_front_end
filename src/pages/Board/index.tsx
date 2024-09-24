@@ -1,39 +1,80 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react'
 
 interface Post {
-  category: string;
-  id: number;
-  title: string;
-  author: string;
-  date: string;
-  comments: number;
-  views: number;
+  category: string
+  id: number
+  title: string
+  author: string
+  date: string
+  comments: number
+  views: number
 }
 
 const allPosts: Post[] = [
-  { id: 1, title: 'React를 활용한 취업 정보', author: '홍길동', date: '2023-09-21', comments: 5, views: 120, category: '취업 정보' },
-  { id: 2, title: '취업 후기: ABC 주식회사', author: '김철수', date: '2023-09-20', comments: 2, views: 95, category: '취업 후기' },
-  { id: 3, title: '자기계발을 위한 필독서', author: '이영희', date: '2023-09-19', comments: 3, views: 150, category: '자기계발' },
-  { id: 4, title: 'Q&A: 면접 준비 질문', author: '박민수', date: '2023-09-18', comments: 8, views: 200, category: 'Q&A' },
-];
+  {
+    id: 1,
+    title: 'React를 활용한 취업 정보',
+    author: '홍길동',
+    date: '2023-09-21',
+    comments: 5,
+    views: 120,
+    category: '취업 정보'
+  },
+  {
+    id: 2,
+    title: '취업 후기: ABC 주식회사',
+    author: '김철수',
+    date: '2023-09-20',
+    comments: 2,
+    views: 95,
+    category: '취업 후기'
+  },
+  {
+    id: 3,
+    title: '자기계발을 위한 필독서',
+    author: '이영희',
+    date: '2023-09-19',
+    comments: 3,
+    views: 150,
+    category: '자기계발'
+  },
+  {
+    id: 4,
+    title: 'Q&A: 면접 준비 질문',
+    author: '박민수',
+    date: '2023-09-18',
+    comments: 8,
+    views: 200,
+    category: 'Q&A'
+  }
+]
 
 const Board: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('취업 정보');
+  const [selectedCategory, setSelectedCategory] = useState<string>('취업 정보')
 
   // 선택된 카테고리에 따라 게시글 필터링
-  const filteredPosts = allPosts.filter(post => post.category === selectedCategory);
+  const filteredPosts = allPosts.filter(post => post.category === selectedCategory)
 
   return (
     <div className="p-5 bg-gray-50 rounded-lg shadow-md">
       <h2 className="text-xl font-bold mb-4 text-center">게시판</h2>
       <div className="flex justify-between mb-4">
         <div className="flex space-x-4">
-          {['취업 정보', '취업 후기', 'Q&A', '자기계발'].map((category) => (
+          {[
+            '가입인사',
+            '취업 정보',
+            '취업 후기',
+            'Q&A',
+            '자기계발',
+            '스터디 모집',
+            '컨퍼런스 동행'
+          ].map(category => (
             <button
               key={category}
-              className={`px-4 py-2 rounded ${selectedCategory === category ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-              onClick={() => setSelectedCategory(category)}
-            >
+              className={`px-4 py-2 rounded ${
+                selectedCategory === category ? 'bg-blue-600 text-white' : 'bg-gray-200'
+              }`}
+              onClick={() => setSelectedCategory(category)}>
               {category}
             </button>
           ))}
@@ -55,8 +96,11 @@ const Board: React.FC = () => {
           </thead>
           <tbody>
             {filteredPosts.length > 0 ? (
-              filteredPosts.map((post) => (
-                <tr key={post.id} className="hover:bg-gray-100 cursor-pointer" onClick={() => alert(`게시글 ${post.id} 상세 페이지로 이동`)}>
+              filteredPosts.map(post => (
+                <tr
+                  key={post.id}
+                  className="hover:bg-gray-100 cursor-pointer"
+                  onClick={() => alert(`게시글 ${post.id} 상세 페이지로 이동`)}>
                   <td className="border px-4 py-2">{post.title}</td>
                   <td className="border px-4 py-2">{post.author}</td>
                   <td className="border px-4 py-2">{post.date}</td>
@@ -66,14 +110,16 @@ const Board: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center border px-4 py-2">게시글이 없습니다.</td>
+                <td colSpan={5} className="text-center border px-4 py-2">
+                  게시글이 없습니다.
+                </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Board;
+export default Board
