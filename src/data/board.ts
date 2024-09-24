@@ -35,12 +35,20 @@ const convertRandomUser = (result: unknown) => {
 }
 
 export const fetchBoardList = (): Promise<IBoard> =>
-  new Promise((resolve, reject) => {
-    fetch(BACKEND_URL + '/board/list')
-      .then(res => res.json())
-      .then((data: unknown) => {
-        console.log(data)
-        const {results} = data as {results: IBoard[]}
-        resolve(convertRandomUser(results[0]))
-      })
+  new Promise(async (resolve, reject) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({title: 'React POST Request Example'})
+    }
+
+    const response = await fetch(BACKEND_URL + '/board/list', requestOptions)
+      // .then(res => res.json())
+      // .then((data: unknown) => {
+      //   console.log(data)
+      //   const {results} = data as {results: IBoard[]}
+      //   resolve(convertRandomUser(results[0]))
+      // })
+      const data = await response.json();
+      return data;
   })

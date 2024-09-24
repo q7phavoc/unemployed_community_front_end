@@ -1,6 +1,7 @@
 export * from './util'
 export * from './image'
 export * from './chance'
+export * from './constants'
 export * from './date'
 export * from './user'
 export * from './Card'
