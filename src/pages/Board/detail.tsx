@@ -9,7 +9,7 @@ const BoardDetail: React.FC = () => {
   const { id } = useParams();
 
   // 게시글 상태 관리
-  const [board, setBoard] = useState<Omit<IBoard, 'id' | 'created_at' | 'comment_count' | 'view_count'>>({
+  const [board, setBoard] = useState<Omit<IBoard, 'id' | 'contents2'| 'created_at' | 'comment_count' | 'view_count'>>({
     title: '',
     contents: '',
     board_category: BOARD_CATEGORY[0],

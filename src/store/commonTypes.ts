@@ -22,6 +22,7 @@ export type IBoard = {
   id: number
   title: string
   contents: string
+  contents2: string
   board_category: string
   writer_id: number
   created_at: string
