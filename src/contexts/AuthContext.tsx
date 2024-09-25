@@ -27,17 +27,20 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({children
   const signup = useCallback((email: string, password: string, callback?: Callback) => {
     const user = {email, password}
     setLoggedUser(notUsed => ({email, password}))
+    localStorage.setItem('user', JSON.stringify({email, password}));
     U.writeObjectP('user', user).finally(() => callback && callback())
     //callback && callback()
   }, [])
 
   const login = useCallback((email: string, password: string, callback?: Callback) => {
     setLoggedUser(notUsed => ({email, password}))
+    localStorage.setItem('user', JSON.stringify({email, password}));
     callback && callback()
   }, [])
 
   const logout = useCallback((callback?: Callback) => {
     setLoggedUser(undefined)
+    localStorage.removeItem('user');
     callback && callback()
   }, [])
 

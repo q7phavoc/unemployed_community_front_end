@@ -17,12 +17,46 @@ export default function SignUp() {
     []
   )
 
+  const [message, setMessage] = useState('');
+
   const navigate = useNavigate()
   const {signup} = useAuth()
-  const createAccount = useCallback(() => {
+  const createAccount = useCallback(async () => {
     console.log(email, password, confirmPassword)
     if (password === confirmPassword) {
-      signup(email, password, () => navigate('/'))
+      setMessage('');
+
+      // 비밀번호 확인 체크
+      if (password !== confirmPassword) {
+        setMessage('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+
+      try {
+        const response = await fetch(D.BACKEND_URL + '/user/join', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('회원가입 데이터:', data);
+
+          if (data.ok) {
+            setMessage('회원가입에 성공했습니다!');
+            signup(email, password, () => navigate('/'))
+          }
+
+          setMessage(data.message || '회원가입 실패');
+        } else {
+          const errorData = await response.json();
+          setMessage(errorData.message || '회원가입 실패');
+        }
+      } catch (error) {
+        setMessage('서버와의 통신에 문제가 발생했습니다.');
+      }
+        
     } else alert('password is not equal to confirmPassword')
   }, [confirmPassword, email, navigate, password, signup])
 
@@ -37,6 +71,7 @@ export default function SignUp() {
             onChange={changed('password')}/>
           <input type="password" className="w-full p-3 mb-4 input input-primary" name="confirm_password" placeholder="Confirm Password" 
             value={confirmPassword} onChange={changed('confirmPassword')}/>
+          {message && <p style={{ color: message.includes('성공') ? 'green' : 'red' }}>{message}</p>}
           <button type="submit" className="w-full btn btn-primary" onClick={createAccount}>Create Account</button>
           <div className="mt-6 text-grey-dark">
             Already have an accout?

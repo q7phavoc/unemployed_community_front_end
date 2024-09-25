@@ -3,7 +3,9 @@ import { Link } from '../../components';
 import { useAuth } from '../../contexts';
 
 export default function NavigationBar() {
-  const { loggedUser } = useAuth();
+  // const { loggedUser } = useAuth();
+
+  const loggedUser = localStorage.getItem('user');
 
   return (
     <div className="flex justify-between items-center bg-gradient-to-r from-purple-500 to-blue-500 h-16 p-4 shadow-lg">

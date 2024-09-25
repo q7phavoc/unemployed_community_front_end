@@ -9,7 +9,8 @@ const RequireAuth: FC<PropsWithChildren<RequireAuthProps>> = ({children}) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!loggedUser) navigate(-1)
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) navigate(-1)
   }, [loggedUser, navigate])
 
   return <>{children}</>

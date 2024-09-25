@@ -28,3 +28,26 @@ export type IBoard = {
   comment_count: number
   view_count: number
 }
+
+export interface IGroup {
+  id: number
+  name: string
+  description: string
+  participants: number
+}
+
+export interface ICourse {
+  id: number
+  title: string
+  instructor: string
+  duration: string
+  rating: number
+}
+
+export interface IEvent {
+  id: number;
+  name: string;
+  description: string;
+  participants: number;
+  timeLeft: string;
+}

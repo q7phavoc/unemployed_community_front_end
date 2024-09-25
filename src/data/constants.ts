@@ -8,3 +8,5 @@ export const BOARD_CATEGORY = [
   '스터디 모집',
   '컨퍼런스 동행'
 ];
+export const COMMUNITY_CATEGORY = ['지역 소모임', '업종별 소모임', '멘토링 프로그램'];
+export const COURSE_CATEGORY = [ `취업 강의`, `블로그/기사`, `추천 강의`];

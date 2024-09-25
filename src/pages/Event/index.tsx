@@ -1,20 +1,25 @@
-import React from 'react';
-
-interface Event {
-  id: number;
-  name: string;
-  description: string;
-  participants: number;
-  timeLeft: string; // 예: "2일 남음"
-}
-
-const events: Event[] = [
-  { id: 1, name: '웹 개발 워크숍', description: '초보자를 위한 웹 개발 기초 워크숍입니다.', participants: 30, timeLeft: '3일 남음' },
-  { id: 2, name: '데이터 분석 세미나', description: '실전 데이터 분석 기법을 배워보세요.', participants: 25, timeLeft: '5일 남음' },
-  { id: 3, name: '프로그래밍 대회', description: '팀을 이루어 다양한 문제를 풀어보는 대회입니다.', participants: 15, timeLeft: '1일 남음' },
-];
+import React, { useEffect, useState } from 'react';
+import { IEvent } from '../../store/commonTypes';
+import { BACKEND_URL } from '../../data';
 
 const Event: React.FC = () => {
+  const [events, setEvents] = useState<IEvent[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+
+      const res = await fetch(BACKEND_URL + `/event/list`, requestOptions);
+      const result = await res.json();
+      return result.eventList;
+    }
+
+    fetchData().then(res => setEvents(res));
+  }, []);
+
   return (
     <div className="p-5 bg-gray-50 rounded-lg shadow-md">
       <h2 className="text-xl font-bold mb-4 text-center">현재 진행 중인 이벤트</h2>
